@@ -1,0 +1,128 @@
+:root {
+    --primary-color: rgba(0, 120, 231, .8);
+    --primary-darker-color: rgba(0, 120, 231, 1);
+    --gray-color: #eee;
+    --gray-light-color: rgba(108, 108, 108, 1);
+    --gray-darker-color: rgba(51, 51, 51, 1);
+}
+
+html, body {
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+    padding: 0;
+    margin: 0;
+}
+
+#content {
+    display: flex;
+}
+
+#sidebar,
+#editor,
+#output {
+    height: 100vh;
+    overflow: hidden;
+}
+
+#sidebar {
+    width: 15%;
+    background: #333;
+}
+
+#new-file-btn-wrapper {
+    padding:  1rem 5px;
+}
+
+#info {
+    padding: 5px;
+    color: var(--gray-darker-color);
+    background-color: var(--gray-color);
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+#info small {
+    display: block;
+}
+
+#sidebar #file-list {
+    color: #fff;
+    padding-left: 0;
+    list-style: none;
+    margin: 0;
+}
+
+#sidebar #file-list li {
+    margin-bottom: .3rem;
+    cursor: pointer;
+    display: flex;
+    padding: 5px 10px;
+}
+
+#sidebar #file-list li span:nth-child(1) {
+    text-align: left;
+    flex: 1;
+    padding-right: 1rem;
+}
+
+#sidebar #file-list li:hover {
+    background-color: var(--gray-light-color);
+}
+
+#editor {
+    width: 45%;
+    border-right: 2px solid var(--primary-color);
+    position: relative;
+}
+
+#editor #first-screen {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 99;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    flex-direction: column;
+}
+
+#output {
+    width: 40%;
+    position: relative;
+}
+
+#output #output-iframe {
+    width: 100%;
+    height: 100%;
+}
+
+.btn {
+    border: none;
+    padding: .5rem 1.5rem;
+}
+
+.btn.btn-primary {
+    background-color: var(--primary-color);
+    color: #fff;   
+}
+
+.btn.btn-primary:hover {
+    background-color: var(--primary-darker-color);
+}
+.btn.btn-block {
+    width: 100%;
+} 
+
+.hidden {
+    display: none !important;
+}

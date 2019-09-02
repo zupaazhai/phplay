@@ -75,7 +75,13 @@ class App
             return false; 
         }
 
-        return file_put_contents($filePath, $content);
+        file_put_contents($filePath, $content);
+
+        return array(
+            'name' => $fileName,
+            'path' => FILE_DIR . $fileName,
+            'url' => FILE_URL . $fileName
+        );
     }
 
     public function deleteFile($fileName)
@@ -168,7 +174,7 @@ class Action
             die;
         }
 
-        return $this->app->json(201, $req, 'created');
+        return $this->app->json(201, $res, 'created');
     }
 
     public function updateFile()

@@ -128,8 +128,13 @@ App.prototype = {
                 name: name,
                 content: content
             },
-            success: function () {
+            success: function (res) {
                 self.getFiles()
+                res = JSON.parse(res)
+
+                var newFile = res.data
+
+                self.open(newFile)
             },
             fail: function (res) {
                 res = JSON.parse(res)
@@ -197,6 +202,7 @@ App.prototype = {
                 name: file.name
             },
             success: function (res) {
+                self.el.outputIframe.remove()
                 window.location.reload()
             },
             fail: function () {

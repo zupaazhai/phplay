@@ -19,9 +19,15 @@ Clone this repository
 ```
 git clone https://github.com/zupaazhai/phplay.git
 ```
-Make someting awesom
+Make someting awesome
 
 Build editor
 ```
 php build.php
 ```
+index.php file export to `dist/`
+
+### List of library/package in project
+
+[Codemirror](https://codemirror.net/)
+[ResizableGrid](https://www.brainbell.com/javascript/download/demo-resizable.html)

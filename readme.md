@@ -1,6 +1,8 @@
 # phplay
 ## Simple PHP playground editor
 
+![phplay](https://raw.githubusercontent.com/zupaazhai/phplay/master/phplay.png)
+
 ### Installation
 
 Download build version

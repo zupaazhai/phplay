@@ -5,7 +5,9 @@ var App = function () {
         fileItem: document.querySelectorAll('.file-item'),
         outputIframe: document.getElementById('output-iframe'),
         editor: document.getElementById('codearea'),
-        newFileBtn: document.getElementById('new-file-btn')
+        newFileBtn: document.getElementById('new-file-btn'),
+        columns: document.getElementById('columns'),
+        iframeOverlay: document.getElementById('iframe-overlay')
     }
 
     this.editor = null
@@ -24,6 +26,30 @@ App.prototype = {
         this.el.newFileBtn.addEventListener('click', function () {
             this.create(this.phpOpenTag)
         }.bind(this))
+        this.bindResizeColumn()
+    },
+
+    bindResizeColumn: function () {
+        var self = this
+        resizableGrid(this.el.columns, function () {
+            self.toggleIframeOverlay().show()
+        }, function () {
+            self.toggleIframeOverlay().hide()
+        })
+    },
+
+    toggleIframeOverlay: function () {
+
+        var self = this
+
+        return {
+            show: function () {
+                self.el.iframeOverlay.classList.add('active')
+            },
+            hide: function () {
+                self.el.iframeOverlay.classList.remove('active')
+            }
+        }
     },
 
     setEditor: function () {

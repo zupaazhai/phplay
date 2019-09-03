@@ -252,8 +252,13 @@ h1, h2, h3, h4, h5, h6, p {
     margin: 0;
 }
 
-#content {
-    display: flex;
+#columns {
+    width: 100%;
+    height: 100vh;
+}
+
+#columns tr td {
+    text-align: start;
 }
 
 #sidebar,
@@ -273,12 +278,12 @@ h1, h2, h3, h4, h5, h6, p {
 }
 
 #info {
-    padding: 5px;
+    padding: 10px;
     color: var(--gray-darker-color);
     background-color: var(--gray-color);
     position: absolute;
     left: 0;
-    bottom: 0;
+    bottom: 10px;
     width: 100%;
 }
 
@@ -341,6 +346,20 @@ h1, h2, h3, h4, h5, h6, p {
 #output #output-iframe {
     width: 100%;
     height: 100%;
+}
+
+#iframe-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.6);
+    display: none;
+}
+
+#iframe-overlay.active {
+    display: block !important;
 }
 
 .btn {
@@ -762,25 +781,31 @@ div.cm-s-mdn-like span.CodeMirror-matchingbracket { outline:1px solid grey; colo
 </style>
 </head>
 <body>
-    <div id="content">
-        <div id="sidebar">
-            <div id="new-file-btn-wrapper">
-                <button id="new-file-btn" class="btn btn-block btn-primary">New file</button>
-            </div>
-            <ul id="file-list"></ul>
-        </div>
-        <div id="editor">
-            <textarea id="codearea" cols="30" rows="10"></textarea>
-        </div>
-
-        <div id="output">
-            <iframe id="output-iframe" src="" frameborder="0"></iframe>
-            <div id="info">
-                <small>PHP <?php echo PHP_VERSION ?></small>
-                <small>display_errors: <?php echo ini_get('display_errors') ?></small>
-                <small>display_startup_errors: <?php echo ini_get('display_startup_errors') ?></small>
-            </div>
-        </div>
+    <div>
+        <table cellspacing="0" id="columns">
+            <tbody>
+                <tr>
+                    <td id="sidebar" valign="top">
+                        <div id="new-file-btn-wrapper">
+                            <button id="new-file-btn" class="btn btn-block btn-primary">New file</button>
+                        </div>
+                        <ul id="file-list"></ul>
+                    </td>
+                    <td id="editor" valign="top">
+                        <textarea id="codearea" cols="30" rows="10"></textarea>
+                    </td>
+                    <td id="output" valign="top">
+                        <iframe id="output-iframe" src="" frameborder="0"></iframe>
+                        <div id="info">
+                            <small>PHP <?php echo PHP_VERSION ?></small>
+                            <small>display_errors: <?php echo ini_get('display_errors') ?></small>
+                            <small>display_startup_errors: <?php echo ini_get('display_startup_errors') ?></small>
+                        </div>
+                        <div id="iframe-overlay"></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
     <script>// CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: https://codemirror.net/LICENSE
@@ -14135,6 +14160,116 @@ CodeMirror.defineMode("clike", function(config, parserConfig) {
   CodeMirror.defineMIME("text/x-php", phpConfig);
 });
 </script>
+    <script>/**
+ * Function resize grid
+ * 
+ * Created and original from "Creating resizable table grid with JavaScript"
+ * https://www.brainbell.com/javascript/making-resizable-table-js.html
+ * 
+ * @param Object table 
+ * @param function onResize
+ * @param function onResizeDone
+ */
+function resizableGrid(table, onResize, onResizeDone) {
+
+    var row = table.getElementsByTagName('tr')[0],
+        cols = row ? row.children : undefined;
+    if (!cols) return;
+
+    table.style.overflow = 'hidden';
+
+    var tableHeight = table.offsetHeight;
+
+    for (var i = 0; i < cols.length; i++) {
+        var div = createDiv(tableHeight);
+        cols[i].appendChild(div);
+        cols[i].style.position = 'relative';
+        setListeners(div);
+    }
+
+    function setListeners(div) {
+        var pageX, curCol, nxtCol, curColWidth, nxtColWidth;
+
+        div.addEventListener('mousedown', function (e) {
+            curCol = e.target.parentElement;
+            nxtCol = curCol.nextElementSibling;
+            pageX = e.pageX;
+
+            var padding = paddingDiff(curCol);
+
+            curColWidth = curCol.offsetWidth - padding;
+            if (nxtCol)
+                nxtColWidth = nxtCol.offsetWidth - padding;
+            
+            if (typeof onResize == 'function') {
+                onResize()
+            }
+        });
+
+        div.addEventListener('mouseover', function (e) {
+            e.target.style.borderRight = '2px solid #0000ff';
+        })
+
+        div.addEventListener('mouseout', function (e) {
+            e.target.style.borderRight = '';
+        })
+
+        document.addEventListener('mousemove', function (e) {
+            if (curCol) {
+                var diffX = e.pageX - pageX;
+
+                if (nxtCol)
+                    nxtCol.style.width = (nxtColWidth - (diffX)) + 'px';
+
+                curCol.style.width = (curColWidth + diffX) + 'px';
+
+                if (typeof onResize == 'function') {
+                    onResize()
+                }
+            }
+        });
+
+        document.addEventListener('mouseup', function (e) {
+            curCol = undefined;
+            nxtCol = undefined;
+            pageX = undefined;
+            nxtColWidth = undefined;
+            curColWidth = undefined
+
+            if (typeof onResizeDone == 'function') {
+                onResizeDone()
+            }
+        });
+    }
+
+    function createDiv(height) {
+        var div = document.createElement('div');
+        div.style.top = 0;
+        div.style.right = 0;
+        div.style.width = '5px';
+        div.style.position = 'absolute';
+        div.style.cursor = 'col-resize';
+        div.style.userSelect = 'none';
+        div.style.height = height + 'px';
+        return div;
+    }
+
+    function paddingDiff(col) {
+
+        if (getStyleVal(col, 'box-sizing') == 'border-box') {
+            return 0;
+        }
+
+        var padLeft = getStyleVal(col, 'padding-left');
+        var padRight = getStyleVal(col, 'padding-right');
+        return (parseInt(padLeft) + parseInt(padRight));
+
+    }
+
+    function getStyleVal(elm, css) {
+        return (window.getComputedStyle(elm, null).getPropertyValue(css))
+    }
+};</script>
     <script>
         window.url = {
             updateFile: '/?action=update_file',
@@ -14143,7 +14278,7 @@ CodeMirror.defineMode("clike", function(config, parserConfig) {
             getFiles: '/?action=get_files',
             deleteFile: '/?action=delete_file'
         }
-    </script>    
+    </script>
     <script>var App = function () {
 
     this.el = {
@@ -14151,7 +14286,9 @@ CodeMirror.defineMode("clike", function(config, parserConfig) {
         fileItem: document.querySelectorAll('.file-item'),
         outputIframe: document.getElementById('output-iframe'),
         editor: document.getElementById('codearea'),
-        newFileBtn: document.getElementById('new-file-btn')
+        newFileBtn: document.getElementById('new-file-btn'),
+        columns: document.getElementById('columns'),
+        iframeOverlay: document.getElementById('iframe-overlay')
     }
 
     this.editor = null
@@ -14170,6 +14307,30 @@ App.prototype = {
         this.el.newFileBtn.addEventListener('click', function () {
             this.create(this.phpOpenTag)
         }.bind(this))
+        this.bindResizeColumn()
+    },
+
+    bindResizeColumn: function () {
+        var self = this
+        resizableGrid(this.el.columns, function () {
+            self.toggleIframeOverlay().show()
+        }, function () {
+            self.toggleIframeOverlay().hide()
+        })
+    },
+
+    toggleIframeOverlay: function () {
+
+        var self = this
+
+        return {
+            show: function () {
+                self.el.iframeOverlay.classList.add('active')
+            },
+            hide: function () {
+                self.el.iframeOverlay.classList.remove('active')
+            }
+        }
     },
 
     setEditor: function () {

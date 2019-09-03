@@ -23,25 +23,31 @@
     <?php style('css/codemirror-theme.css') ?>
 </head>
 <body>
-    <div id="content">
-        <div id="sidebar">
-            <div id="new-file-btn-wrapper">
-                <button id="new-file-btn" class="btn btn-block btn-primary">New file</button>
-            </div>
-            <ul id="file-list"></ul>
-        </div>
-        <div id="editor">
-            <textarea id="codearea" cols="30" rows="10"></textarea>
-        </div>
-
-        <div id="output">
-            <iframe id="output-iframe" src="" frameborder="0"></iframe>
-            <div id="info">
-                <small>PHP <?php echo PHP_VERSION ?></small>
-                <small>display_errors: <?php echo ini_get('display_errors') ?></small>
-                <small>display_startup_errors: <?php echo ini_get('display_startup_errors') ?></small>
-            </div>
-        </div>
+    <div>
+        <table cellspacing="0" id="columns">
+            <tbody>
+                <tr>
+                    <td id="sidebar" valign="top">
+                        <div id="new-file-btn-wrapper">
+                            <button id="new-file-btn" class="btn btn-block btn-primary">New file</button>
+                        </div>
+                        <ul id="file-list"></ul>
+                    </td>
+                    <td id="editor" valign="top">
+                        <textarea id="codearea" cols="30" rows="10"></textarea>
+                    </td>
+                    <td id="output" valign="top">
+                        <iframe id="output-iframe" src="" frameborder="0"></iframe>
+                        <div id="info">
+                            <small>PHP <?php echo PHP_VERSION ?></small>
+                            <small>display_errors: <?php echo ini_get('display_errors') ?></small>
+                            <small>display_startup_errors: <?php echo ini_get('display_startup_errors') ?></small>
+                        </div>
+                        <div id="iframe-overlay"></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
     <?php script('js/codemirror/codemirror.js') ?>
     <?php script('js/codemirror/matchbrackets.js') ?>
@@ -51,6 +57,7 @@
     <?php script('js/codemirror/css.js') ?>
     <?php script('js/codemirror/clike.js') ?>
     <?php script('js/codemirror/php.js') ?>
+    <?php script('js/column-resize.js') ?>
     <script>
         window.url = {
             updateFile: '<?php echo BASE_URL ?>/?action=update_file',
@@ -59,7 +66,7 @@
             getFiles: '<?php echo BASE_URL ?>/?action=get_files',
             deleteFile: '<?php echo BASE_URL ?>/?action=delete_file'
         }
-    </script>    
+    </script>
     <?php script('js/app.js') ?>
 </body>
 </html>

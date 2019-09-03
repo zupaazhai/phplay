@@ -17,8 +17,13 @@ h1, h2, h3, h4, h5, h6, p {
     margin: 0;
 }
 
-#content {
-    display: flex;
+#columns {
+    width: 100%;
+    height: 100vh;
+}
+
+#columns tr td {
+    text-align: start;
 }
 
 #sidebar,
@@ -38,12 +43,12 @@ h1, h2, h3, h4, h5, h6, p {
 }
 
 #info {
-    padding: 5px;
+    padding: 10px;
     color: var(--gray-darker-color);
     background-color: var(--gray-color);
     position: absolute;
     left: 0;
-    bottom: 0;
+    bottom: 10px;
     width: 100%;
 }
 
@@ -106,6 +111,20 @@ h1, h2, h3, h4, h5, h6, p {
 #output #output-iframe {
     width: 100%;
     height: 100%;
+}
+
+#iframe-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.6);
+    display: none;
+}
+
+#iframe-overlay.active {
+    display: block !important;
 }
 
 .btn {

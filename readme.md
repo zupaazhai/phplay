@@ -29,5 +29,5 @@ index.php file export to `dist/`
 
 ### List of library/package in project
 
-[Codemirror](https://codemirror.net/)
-[ResizableGrid](https://www.brainbell.com/javascript/download/demo-resizable.html)
+- [Codemirror](https://codemirror.net/)
+- [ResizableGrid](https://www.brainbell.com/javascript/download/demo-resizable.html)

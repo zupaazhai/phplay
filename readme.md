@@ -12,3 +12,16 @@ Run script
 ```
 php -S localhost:9095
 ```
+
+### Development
+
+Clone this repository
+```
+git clone https://github.com/zupaazhai/phplay.git
+```
+Make someting awesom
+
+Build editor
+```
+php build.php
+```

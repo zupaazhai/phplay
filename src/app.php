@@ -7,6 +7,10 @@ class App
     public function __construct()
     {
         $this->allowedFiles = array('php');
+
+        if (!is_dir(FILE_DIR)) {
+            mkdir(FILE_DIR);
+        }
     }
 
     public function getFileList()
@@ -200,3 +204,13 @@ class Action
 
 $action = new Action();
 $action->run();
+
+function style($path)
+{
+    echo '<link rel="stylesheet" href="' . $path . '">' . "\n";
+}
+
+function script($path)
+{
+    echo '<script src="' . $path . '"></script>' . "\n";
+}

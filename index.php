@@ -7,8 +7,9 @@
     define('BASE_DIR', __DIR__ . DS);
     define('FILE_DIR', BASE_DIR . 'files' . DS);
     define('FILE_URL', '/files/');
+    define('BASE_URL' , '');
 
-    require BASE_DIR . 'src' . DS . 'app.php';
+    require('src/app.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,9 +18,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>PHP Editor</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/codemirror.css">
-    <link rel="stylesheet" href="css/codemirror-theme.css">
+    <?php style('css/style.css') ?>
+    <?php style('css/codemirror.css') ?>
+    <?php style('css/codemirror-theme.css') ?>
 </head>
 <body>
     <div id="content">
@@ -42,15 +43,23 @@
             </div>
         </div>
     </div>
-    <script src="js/codemirror/codemirror.js"></script>
-    <script src="js/codemirror/matchbrackets.js"></script>
-    <script src="js/codemirror/htmlmixed.js"></script>
-    <script src="js/codemirror/xml.js"></script>
-    <script src="js/codemirror/javascript.js"></script>
-    <script src="js/codemirror/css.js"></script>
-    <script src="js/codemirror/clike.js"></script>
-    <script src="js/codemirror/php.js"></script>
-    <script src="js/app.js"></script>
-    <script></script>
+    <?php script('js/codemirror/codemirror.js') ?>
+    <?php script('js/codemirror/matchbrackets.js') ?>
+    <?php script('js/codemirror/htmlmixed.js') ?>
+    <?php script('js/codemirror/xml.js') ?>
+    <?php script('js/codemirror/javascript.js') ?>
+    <?php script('js/codemirror/css.js') ?>
+    <?php script('js/codemirror/clike.js') ?>
+    <?php script('js/codemirror/php.js') ?>
+    <script>
+        window.url = {
+            updateFile: '<?php echo BASE_URL ?>/?action=update_file',
+            getFile: '<?php echo BASE_URL ?>/?action=get_file&filename=',
+            createFile: '<?php echo BASE_URL ?>/?action=create_file',
+            getFiles: '<?php echo BASE_URL ?>/?action=get_files',
+            deleteFile: '<?php echo BASE_URL ?>/?action=delete_file'
+        }
+    </script>    
+    <?php script('js/app.js') ?>
 </body>
 </html>

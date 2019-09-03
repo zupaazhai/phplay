@@ -10,6 +10,7 @@ var App = function () {
 
     this.editor = null
     this.currentFile = {}
+    this.phpOpenTag = "<" + '?php' + " \n"
 }
 
 App.prototype = {
@@ -21,7 +22,7 @@ App.prototype = {
         this.setEditor()
         this.getFiles()
         this.el.newFileBtn.addEventListener('click', function () {
-            this.create("<?php \n")
+            this.create(this.phpOpenTag)
         }.bind(this))
     },
 
@@ -47,7 +48,7 @@ App.prototype = {
         
         this.editor.setSize("100%", "100%")
         this.editor.setOption("theme", 'mdn-like')
-        this.editor.getDoc().setValue("<?php \n");
+        this.editor.getDoc().setValue(this.phpOpenTag);
     },
 
     onSave: function () {
@@ -60,7 +61,7 @@ App.prototype = {
 
         this.xhr({
             method: 'post',
-            url: '/?action=update_file',
+            url: window.url.updateFile,
             data: {
                 name: this.currentFile.name,
                 content: this.editor.getValue()
@@ -94,7 +95,7 @@ App.prototype = {
         this.el.outputIframe.src = src
         this.xhr({
             method: 'get',
-            url: '/?action=get_file&filename=' + file.name,
+            url: window.url.getFile + file.name,
             success: function (res) {
                 res = JSON.parse(res)
                 var content = res.data.content
@@ -123,7 +124,7 @@ App.prototype = {
 
         this.xhr({
             method: 'post',
-            url: '/?action=create_file',
+            url: window.url.createFile,
             data: {
                 name: name,
                 content: content
@@ -153,7 +154,7 @@ App.prototype = {
         
         this.xhr({
             method: 'get',
-            url: '/?action=get_files',
+            url: window.url.getFiles,
             success: function (res) {
                 res = JSON.parse(res)
                 var files  = res.data
@@ -197,7 +198,7 @@ App.prototype = {
 
         this.xhr({
             method: 'post',
-            url: '/?action=delete_file',
+            url: window.url.deleteFile,
             data: {
                 name: file.name
             },

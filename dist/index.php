@@ -269,7 +269,7 @@ h1, h2, h3, h4, h5, h6, p {
 }
 
 #sidebar {
-    width: 15%;
+    width: 12%;
     background: #333;
 }
 
@@ -296,6 +296,8 @@ h1, h2, h3, h4, h5, h6, p {
     padding-left: 0;
     list-style: none;
     margin: 0;
+    font-family: monospace;
+    font-size: .8rem;
 }
 
 #sidebar #file-list li {
@@ -304,16 +306,22 @@ h1, h2, h3, h4, h5, h6, p {
     display: flex;
 }
 #sidebar #file-list li span {
-    padding: 5px 10px;
+    padding: 8px 10px;
+    font-weight: bold;
 }
 
-#sidebar #file-list li span:nth-child(1) {
+#sidebar #file-list li span:nth-child(2) {
     text-align: left;
     flex: 1;
     padding-right: 1rem;
 }
 
-#sidebar #file-list li:hover {
+#sidebar #file-list li:hover,
+#sidebar #file-list li.active {
+    background-color: var(--gray-light-color);
+}
+
+#sidebar #file-list li input:checked ~ span {
     background-color: var(--gray-light-color);
 }
 
@@ -321,6 +329,16 @@ h1, h2, h3, h4, h5, h6, p {
     width: 45%;
     border-right: 2px solid var(--primary-color);
     position: relative;
+}
+
+#editor-info {
+    position: absolute;
+    bottom: 0;
+    width: 96.4%;
+    left: 9px;
+    background-color: var(--gray-color);
+    z-index: 9;
+    padding: 10px;
 }
 
 #editor #first-screen {
@@ -793,6 +811,9 @@ div.cm-s-mdn-like span.CodeMirror-matchingbracket { outline:1px solid grey; colo
                     </td>
                     <td id="editor" valign="top">
                         <textarea id="codearea" cols="30" rows="10"></textarea>
+                        <div id="editor-info">
+                            <small>Tip! <strong>Ctrl+S</strong> or <strong>Ctrl+enter</strong> for saving and see result</small>
+                        </div>
                     </td>
                     <td id="output" valign="top">
                         <iframe id="output-iframe" src="" frameborder="0"></iframe>
@@ -14380,8 +14401,6 @@ App.prototype = {
 
             }
         })
-
-        console.log(this.currentFile)
     },
 
     checkFilename: function (name) {
@@ -14426,8 +14445,16 @@ App.prototype = {
         }
 
         if (!this.checkFilename(name)) {
-            alert('File name is in valid')
+            alert('File name is invalid')
+            return
         }
+
+        if (name.indexOf('.php') == -1) {
+            alert('File name should end with .php');            
+            return
+        }
+
+        name = name.replace(/[^0-9a-zA-Z\.]/g, '');
 
         this.xhr({
             method: 'post',
@@ -14469,11 +14496,17 @@ App.prototype = {
                 files.forEach(function (file) {
                     var li = document.createElement('li'),
                         textSpan = document.createElement('span'),
-                        closeSpan = document.createElement('span')
+                        closeSpan = document.createElement('span'),
+                        radio = document.createElement('input')
                     
                     closeSpan.innerHTML = '&times;'
                     textSpan.innerText = file.name
+
+                    radio.setAttribute('type', 'radio')
+                    radio.setAttribute('name', 'file')
+                    radio.setAttribute('style', 'display: none')
                     
+                    li.appendChild(radio)
                     li.appendChild(textSpan)
                     li.appendChild(closeSpan)
 
@@ -14489,6 +14522,7 @@ App.prototype = {
 
                     textSpan.addEventListener('click', function () {
                         self.open(file, true)
+                        radio.checked = true
                     })
                     self.el.fileList.appendChild(li)
                 })

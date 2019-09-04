@@ -35,6 +35,9 @@
                     </td>
                     <td id="editor" valign="top">
                         <textarea id="codearea" cols="30" rows="10"></textarea>
+                        <div id="editor-info">
+                            <small>Tip! <strong>Ctrl+S</strong> or <strong>Ctrl+enter</strong> for saving and see result</small>
+                        </div>
                     </td>
                     <td id="output" valign="top">
                         <iframe id="output-iframe" src="" frameborder="0"></iframe>

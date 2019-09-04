@@ -99,8 +99,6 @@ App.prototype = {
 
             }
         })
-
-        console.log(this.currentFile)
     },
 
     checkFilename: function (name) {
@@ -145,8 +143,16 @@ App.prototype = {
         }
 
         if (!this.checkFilename(name)) {
-            alert('File name is in valid')
+            alert('File name is invalid')
+            return
         }
+
+        if (name.indexOf('.php') == -1) {
+            alert('File name should end with .php');            
+            return
+        }
+
+        name = name.replace(/[^0-9a-zA-Z\.]/g, '');
 
         this.xhr({
             method: 'post',
@@ -188,11 +194,17 @@ App.prototype = {
                 files.forEach(function (file) {
                     var li = document.createElement('li'),
                         textSpan = document.createElement('span'),
-                        closeSpan = document.createElement('span')
+                        closeSpan = document.createElement('span'),
+                        radio = document.createElement('input')
                     
                     closeSpan.innerHTML = '&times;'
                     textSpan.innerText = file.name
+
+                    radio.setAttribute('type', 'radio')
+                    radio.setAttribute('name', 'file')
+                    radio.setAttribute('style', 'display: none')
                     
+                    li.appendChild(radio)
                     li.appendChild(textSpan)
                     li.appendChild(closeSpan)
 
@@ -208,6 +220,7 @@ App.prototype = {
 
                     textSpan.addEventListener('click', function () {
                         self.open(file, true)
+                        radio.checked = true
                     })
                     self.el.fileList.appendChild(li)
                 })
